@@ -3,8 +3,6 @@ A lightweight C++ GUI text editor for fast and simple editing.
 
 
 
-Here's a **detailed step-by-step task list** to guide you through building your custom GUI text editor in C++ from scratch. This list assumes you're using a GUI framework like **Qt** or **wxWidgets** but can be adapted for others.
-
 ---
 
 ## 🔧 **Phase 1: Project Setup**
@@ -144,15 +142,6 @@ Here's a **detailed step-by-step task list** to guide you through building your 
 
 * Tag versions in Git
 * Upload binaries (if public)
-
----
-
-Let me know if you want this broken down into **weekly goals**, or if you’re using a specific framework so I can tailor the steps more closely.
-
----
-
-**Follow-up questions:**
-
-1. Which GUI framework are you using for this project?
+g for this project?
 2. Do you want to include plugins, themes, or scripting support in the future?
 3. Will this be a code editor (with syntax highlighting), or plain text only?
