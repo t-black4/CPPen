@@ -1,147 +1,97 @@
-# CPPen
-A lightweight C++ GUI text editor for fast and simple editing.
-
-
+Here’s a clear README explaining your OpenGL window project setup with GLFW and GLAD:
 
 ---
 
-## 🔧 **Phase 1: Project Setup**
+# OpenGL Window Example
 
-### 1. **Choose a GUI Framework**
-
-* Select: `Qt`, `wxWidgets`, `ImGui`, `GTK`, etc.
-* Install libraries and set up the environment for your OS (e.g., install Qt Creator for Qt).
-
-### 2. **Set Up Version Control**
-
-* Initialize a `git` repository.
-* Create `.gitignore` for build files and IDE configs.
-
-### 3. **Project Structure**
-
-* Create folders: `src/`, `include/`, `resources/`, `build/`.
-* Create a base `main.cpp` with a minimal GUI window.
+This project creates a simple OpenGL window using **GLFW** for window and input management, and **GLAD** to load OpenGL functions.
 
 ---
 
-## 🧱 **Phase 2: Core GUI Layout**
+## Project Structure
 
-### 4. **Window Setup**
-
-* Create the main application window.
-* Set title, size, and basic styling.
-
-### 5. **Text Area Widget**
-
-* Add a multi-line editable text widget (e.g., `QPlainTextEdit` or `wxTextCtrl`).
-* Connect it to the main layout.
-
-### 6. **Menu Bar**
-
-* Add menus: `File`, `Edit`, `View`, `Help`.
-* Populate with placeholders:
-
-  * File: New, Open, Save, Save As, Exit
-  * Edit: Undo, Redo, Cut, Copy, Paste, Select All
-  * View: Toggle Word Wrap, Show Line Numbers (optional)
-  * Help: About
+```
+project/
+├── main.cpp            # Main source file creating the OpenGL window
+├── CMakeLists.txt      # Build configuration with CMake
+└── external/
+    └── glad/           # GLAD OpenGL loader files (include + src)
+        ├── include/
+        └── src/
+```
 
 ---
 
-## 🧠 **Phase 3: Core Functionality**
+## Dependencies
 
-### 7. **File Operations**
-
-* Implement New, Open, Save, Save As:
-
-  * Open file dialog
-  * Read/write from file
-  * Handle unsaved changes
-
-### 8. **Basic Edit Actions**
-
-* Hook up cut, copy, paste, undo, redo.
-* Keyboard shortcuts (Ctrl+S, Ctrl+O, etc.)
-
-### 9. **Status Bar**
-
-* Add a status bar showing cursor position, file name, and modification state.
+* **GLFW** — For creating windows and handling input
+* **GLAD** — For loading OpenGL function pointers
+* **OpenGL** — The graphics API provided by your GPU drivers
 
 ---
 
-## ✨ **Phase 4: Enhancements**
+## Setup Instructions
 
-### 10. **Syntax Highlighting (Optional)**
+1. **GLAD**
 
-* Create a basic lexer/parser.
-* Highlight keywords, strings, comments, etc. using `QSyntaxHighlighter` (Qt) or similar.
+* Download GLAD from [https://glad.dav1d.de](https://glad.dav1d.de)
+* Configure for OpenGL 3.3 Core, language C/C++
+* Extract the generated `glad.zip` contents into `external/glad` directory
 
-### 11. **Line Numbers (Optional)**
+2. **GLFW**
 
-* Create a line number margin.
-* Sync it with scrolling in the text area.
+* Install GLFW development files on Ubuntu:
 
-### 12. **Search & Replace**
+```bash
+sudo apt install libglfw3-dev
+```
 
-* Add a search bar or dialog.
-* Support case-sensitive search, whole word, etc.
+3. **Build**
 
----
+Run these commands from the root of the project:
 
-## 🗃️ **Phase 5: Configuration & Settings**
+```bash
+mkdir build
+cd build
+cmake ..
+make
+```
 
-### 13. **Preferences Dialog**
+4. **Run**
 
-* Theme selection (light/dark)
-* Font and font size
-* Word wrap toggle
+Execute the compiled binary:
 
-### 14. **Settings Persistence**
+```bash
+./OpenGLWindow
+```
 
-* Save preferences to a config file (e.g., JSON, INI).
-* Load settings on startup.
-
----
-
-## 🚀 **Phase 6: Polish and Package**
-
-### 15. **Custom Icons & UI Polish**
-
-* Add icons to menu and buttons.
-* Apply consistent styling (via QSS or CSS-like system if supported).
-
-### 16. **Error Handling & Validation**
-
-* Handle file read/write errors, unsaved changes, etc.
-
-### 17. **Build System**
-
-* Use CMake or your IDE’s build system to automate builds.
-* Add release/debug builds.
-
-### 18. **Cross-Platform Support (Optional)**
-
-* Test on Linux, Windows, macOS.
-* Add platform-specific adjustments if needed.
+You should see a window with a teal background that resizes properly.
 
 ---
 
-## 📦 **Phase 7: Deployment**
+## How it Works
 
-### 19. **Package Application**
+* `main.cpp` initializes GLFW and creates a window with an OpenGL 3.3 Core profile context.
+* GLAD loads the OpenGL functions required for rendering.
+* The framebuffer size callback updates the viewport on window resize.
+* The render loop clears the window with a teal color and polls for events until you close the window.
+* On exit, GLFW cleans up resources.
 
-* Use deployment tools: `windeployqt` (Qt) or installer creator.
-* Bundle dependencies as needed.
+---
 
-### 20. **Create README and Documentation**
+## CMake Details
 
-* Add build instructions
-* Add usage examples and keyboard shortcuts
+* Defines C++17 standard.
+* Builds a static GLAD library from the included source.
+* Finds OpenGL and GLFW installed on your system.
+* Links your executable to GLAD, GLFW, and OpenGL libraries.
 
-### 21. **Create Release Tags**
+---
 
-* Tag versions in Git
-* Upload binaries (if public)
-g for this project?
-2. Do you want to include plugins, themes, or scripting support in the future?
-3. Will this be a code editor (with syntax highlighting), or plain text only?
+## Next Steps
+
+* Add shader compilation to render shapes.
+* Implement text rendering with FreeType.
+* Add input handling for interactivity.
+
+---
