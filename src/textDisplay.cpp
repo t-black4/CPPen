@@ -49,15 +49,11 @@ void TextDisplay::cleanup() {
         if (ch.second.TextureID)
             glDeleteTextures(1, &ch.second.TextureID);
     }
-    std::cout << "Characters cleared" << std::endl;
     Characters.clear();
-    std::cout << "VAO deleted" << std::endl;
     if (VAO)
         glDeleteVertexArrays(1, &VAO);
-    std::cout << "VBO deleted" << std::endl;
     if (VBO)
         glDeleteBuffers(1, &VBO);
-    std::cout << "Shader program deleted" << std::endl;
     if (textShaderProgram)
         glDeleteProgram(textShaderProgram);
 }
@@ -75,7 +71,7 @@ void TextDisplay::initFreeType() {
         return;
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 24);
+    FT_Set_Pixel_Sizes(face, 0, textHeight);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -157,7 +153,7 @@ void TextDisplay::renderText(const std::string& text, float x, float y, float sc
     for (char c : text) {   
         if (c == '\n') {
             x = 0;
-            y -= 24;
+            y -= textHeight / 1.9;
             continue;
         }
         Character ch = Characters[c];

@@ -24,9 +24,13 @@ public:
     ~TextDisplay();
     void renderText(const std::string& text, float x, float y, float scale, glm::vec3 color);
     void cleanup();
-
+    void setTextWidth(int width) { textWidth = width; }
+    void setTextHeight(int height) { textHeight = height; }
+    int getTextWidth() const { return textWidth; }
+    int getTextHeight() const { return textHeight; }
 private:
-
+    int textWidth = 12;
+    int textHeight = 12;
     std::map<char, Character> Characters;
     unsigned int VAO = 0, VBO = 0;
     unsigned int textShaderProgram = 0;

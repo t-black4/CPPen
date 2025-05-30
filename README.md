@@ -1,12 +1,6 @@
-Here’s a clear README explaining your OpenGL window project setup with GLFW and GLAD:
-
----
-
-# OpenGL Window Example
+# CPPen
 
 This project creates a simple OpenGL window using **GLFW** for window and input management, and **GLAD** to load OpenGL functions.
-
----
 
 ## Project Structure
 
@@ -20,35 +14,41 @@ project/
         └── src/
 ```
 
----
-
 ## Dependencies
 
 * **GLFW** — For creating windows and handling input
 * **GLAD** — For loading OpenGL function pointers
 * **OpenGL** — The graphics API provided by your GPU drivers
 
----
+## Setup and Build Instructions
 
-## Setup Instructions
+### 1. Install C++ Compiler and Build Tools
 
-1. **GLAD**
+```bash
+sudo apt update
+sudo apt install build-essential
+```
+
+### 2. Install Required Libraries
+
+```bash
+# OpenGL development files
+sudo apt install libgl1-mesa-dev libglu1-mesa-dev
+
+# pkg-config tool
+sudo apt install pkg-config
+
+# GLFW library
+sudo apt install libglfw3-dev
+```
+
+### 3. Set up GLAD
 
 * Download GLAD from [https://glad.dav1d.de](https://glad.dav1d.de)
 * Configure for OpenGL 3.3 Core, language C/C++
 * Extract the generated `glad.zip` contents into `external/glad` directory
 
-2. **GLFW**
-
-* Install GLFW development files on Ubuntu:
-
-```bash
-sudo apt install libglfw3-dev
-```
-
-3. **Build**
-
-Run these commands from the root of the project:
+### 4. Build the Project
 
 ```bash
 mkdir build
@@ -57,12 +57,12 @@ cmake ..
 make
 ```
 
-4. **Run**
+### 5. Run
 
 Execute the compiled binary:
 
 ```bash
-./OpenGLWindow
+./CPPen
 ```
 
 You should see a window with a teal background that resizes properly.
@@ -88,10 +88,3 @@ You should see a window with a teal background that resizes properly.
 
 ---
 
-## Next Steps
-
-* Add shader compilation to render shapes.
-* Implement text rendering with FreeType.
-* Add input handling for interactivity.
-
----

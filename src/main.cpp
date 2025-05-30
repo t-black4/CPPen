@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "fileRead.h"
+#include "fileOperater.h"
 #include "textDisplay.h"
 #include "textInput.h"
 #include "callbacks.h"
@@ -13,17 +13,18 @@
 // Use standard namespace
 using namespace std;
 
-int windowWidth = 800;
-int windowHeight = 600;
+int windowWidth = 1200;
+int windowHeight = 800;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, windowWidth, windowHeight);
 }
 
 int main(int argc, char* argv[]) {
     // Initialize GLFW
-
-    FileRead readFile("output.txt");
-    TextInput::getInstance().setInputText(readFile.returnContent());
+    FileOperater::getInstance().setFilename("output.txt");
+    FileOperater::getInstance().readFile();
+    TextInput::getInstance().setInputText(FileOperater::getInstance().returnContent());
     
     if (!glfwInit()) {
         cerr << "Failed to initialize GLFW\n";
@@ -55,19 +56,21 @@ int main(int argc, char* argv[]) {
 
     TextDisplay textDisplay;
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, windowWidth, windowHeight);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    textDisplay.setTextWidth(24);
+    textDisplay.setTextHeight(24);
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Render the input text
-        textDisplay.renderText(TextInput::getInstance().getInputText(), 0, windowHeight - 50, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        FileOperater::getInstance().setContent(TextInput::getInstance().getInputText()); // Update the content
+        textDisplay.renderText(FileOperater::getInstance().returnContent(), 0, windowHeight - textDisplay.getTextHeight(), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

@@ -42,9 +42,8 @@ add_executable(cppen
     src/main.cpp
     src/textDisplay.cpp
     src/textInput.cpp
-    src/fileSave.cpp
+    src/fileOperater.cpp
     src/callbacks.cpp
-    src/fileRead.cpp
 )
 
 target_link_libraries(cppen
