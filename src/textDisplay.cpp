@@ -143,9 +143,12 @@ void TextDisplay::initFreeType() {
 
 void TextDisplay::renderText(const std::string& text, float x, float y, float scale, glm::vec3 color) {
     glUseProgram(textShaderProgram);
-    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+    // Use actual window dimensions and flip Y coordinates for top-left origin
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
     glUniformMatrix4fv(glGetUniformLocation(textShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3f(glGetUniformLocation(textShaderProgram, "textColor"), color.x, color.y, color.z);
+    // Convert y coordinate from top-left to bottom-left origin
+    y = windowHeight - y;
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
@@ -153,7 +156,7 @@ void TextDisplay::renderText(const std::string& text, float x, float y, float sc
     for (char c : text) {   
         if (c == '\n') {
             x = 0;
-            y -= textHeight / 1.9;
+            y -= textHeight / 1.9; // Moving down means increasing Y in OpenGL coordinates
             continue;
         }
         Character ch = Characters[c];

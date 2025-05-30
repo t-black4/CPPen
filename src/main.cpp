@@ -63,6 +63,8 @@ int main(int argc, char* argv[]) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     textDisplay.setTextWidth(24);
     textDisplay.setTextHeight(24);
+    textDisplay.setWindowWidth(windowWidth);
+    textDisplay.setWindowHeight(windowHeight);  
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -70,7 +72,7 @@ int main(int argc, char* argv[]) {
 
         // Render the input text
         FileOperater::getInstance().setContent(TextInput::getInstance().getInputText()); // Update the content
-        textDisplay.renderText(FileOperater::getInstance().returnContent(), 0, windowHeight - textDisplay.getTextHeight(), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        textDisplay.renderText(FileOperater::getInstance().returnContent(), 0, 20, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
