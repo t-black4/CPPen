@@ -1,28 +1,39 @@
 #include "textDisplay.h"
 #include <iostream>
 
+// Vertex shader for text rendering
+// This shader processes each vertex of our text quads
 const char* vertexShaderSource = R"(
     #version 330 core
+    // Each vertex has 4 components: xy for position, zw for texture coordinates
     layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex>
+    // Pass texture coordinates to fragment shader
     out vec2 TexCoords;
+    // Projection matrix for proper 2D positioning in screen space
     uniform mat4 projection;
 
     void main() {
+        // Transform vertex position using projection matrix
         gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);
+        // Forward texture coordinates to fragment shader
         TexCoords = vertex.zw;
     }
 )";
 
+// Fragment shader for text rendering
+// This shader handles the actual coloring of each pixel in the text
 const char* fragmentShaderSource = R"(
     #version 330 core
+    // Texture coordinates from vertex shader
     in vec2 TexCoords;
+    // Final output color
     out vec4 color;
+    // Glyph texture sampler
     uniform sampler2D text;
-    uniform vec3 textColor;
-
     void main() {
-        vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
-        color = vec4(textColor, 1.0) * sampled;
+        // Sample the texture (r channel contains glyph data)
+        // and use it as alpha channel with white color
+        color = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
     }
 )";
 
@@ -31,13 +42,24 @@ TextDisplay::TextDisplay() {
 }
 
 TextDisplay::~TextDisplay() {
-    // Clean up OpenGL resources
+}
+
+void TextDisplay::cleanup() {
     for (auto& ch : Characters) {
-        glDeleteTextures(1, &ch.second.TextureID);
+        if (ch.second.TextureID)
+            glDeleteTextures(1, &ch.second.TextureID);
     }
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteProgram(textShaderProgram);
+    std::cout << "Characters cleared" << std::endl;
+    Characters.clear();
+    std::cout << "VAO deleted" << std::endl;
+    if (VAO)
+        glDeleteVertexArrays(1, &VAO);
+    std::cout << "VBO deleted" << std::endl;
+    if (VBO)
+        glDeleteBuffers(1, &VBO);
+    std::cout << "Shader program deleted" << std::endl;
+    if (textShaderProgram)
+        glDeleteProgram(textShaderProgram);
 }
 
 void TextDisplay::initFreeType() {
@@ -132,7 +154,12 @@ void TextDisplay::renderText(const std::string& text, float x, float y, float sc
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
-    for (char c : text) {
+    for (char c : text) {   
+        if (c == '\n') {
+            x = 0;
+            y -= 24;
+            continue;
+        }
         Character ch = Characters[c];
 
         float xpos = x + ch.Bearing.x * scale;

@@ -19,6 +19,9 @@ target_include_directories(glad PUBLIC
     external/glad/include
 )
 
+# Add include directories for the project
+include_directories(${CMAKE_SOURCE_DIR}/inc)
+
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
@@ -39,6 +42,9 @@ add_executable(cppen
     src/main.cpp
     src/textDisplay.cpp
     src/textInput.cpp
+    src/fileSave.cpp
+    src/callbacks.cpp
+    src/fileRead.cpp
 )
 
 target_link_libraries(cppen

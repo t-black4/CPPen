@@ -2,8 +2,10 @@
 #include <iostream>
 #include <string>
 
+#include "fileRead.h"
 #include "textDisplay.h"
 #include "textInput.h"
+#include "callbacks.h"
 // OpenGL headers
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -11,13 +13,17 @@
 // Use standard namespace
 using namespace std;
 
-
+int windowWidth = 800;
+int windowHeight = 600;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     // Initialize GLFW
+
+    FileRead readFile("output.txt");
+    TextInput::getInstance().setInputText(readFile.returnContent());
     
     if (!glfwInit()) {
         cerr << "Failed to initialize GLFW\n";
@@ -30,13 +36,14 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "CPPen", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "CPPen", nullptr, nullptr);
     if (!window) {
         cerr << "Failed to create window\n";
         glfwTerminate();
         return -1;
     }
-    glfwSetCharCallback(window, TextInput::glfw_character_callback);
+    glfwSetCharCallback(window, Callbacks::glfw_character_callback);
+    glfwSetKeyCallback(window, Callbacks::glfw_key_callback);
 
     glfwMakeContextCurrent(window);
 
@@ -60,12 +67,12 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Render the input text
-        textDisplay.renderText(TextInput::getInstance().getInputText(), 25.0f, 300.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-
+        textDisplay.renderText(TextInput::getInstance().getInputText(), 0, windowHeight - 50, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    textDisplay.cleanup();
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
