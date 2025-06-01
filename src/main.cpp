@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    
 
     // Create window
     GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "CPPen", nullptr, nullptr);
@@ -70,13 +71,16 @@ int main(int argc, char* argv[]) {
     textDisplay.setWindowHeight(windowHeight);  
     // Main loop
     while (!glfwWindowShouldClose(window)) {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Render the input text
         FileOperater::getInstance().setContent(TextInput::getInstance().getInputText()); // Update the content
         
         textDisplay.renderText(FileOperater::getInstance().returnContent(), scrollX, scrollY);
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
+        textDisplay.setWindowWidth(windowWidth);
+        textDisplay.setWindowHeight(windowHeight);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
