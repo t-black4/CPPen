@@ -16,6 +16,9 @@ using namespace std;
 int windowWidth = 1200;
 int windowHeight = 800;
 
+double scrollX = 0;
+double scrollY = 0;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, windowWidth, windowHeight);
 }
@@ -45,7 +48,7 @@ int main(int argc, char* argv[]) {
     }
     glfwSetCharCallback(window, Callbacks::glfw_character_callback);
     glfwSetKeyCallback(window, Callbacks::glfw_key_callback);
-
+    glfwSetScrollCallback(window, Callbacks::scroll_callback);
     glfwMakeContextCurrent(window);
 
     // Load OpenGL functions via GLAD
@@ -61,8 +64,8 @@ int main(int argc, char* argv[]) {
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    textDisplay.setTextWidth(24);
-    textDisplay.setTextHeight(24);
+    textDisplay.setTextWidth(32);
+    textDisplay.setTextHeight(32);
     textDisplay.setWindowWidth(windowWidth);
     textDisplay.setWindowHeight(windowHeight);  
     // Main loop
@@ -72,7 +75,8 @@ int main(int argc, char* argv[]) {
 
         // Render the input text
         FileOperater::getInstance().setContent(TextInput::getInstance().getInputText()); // Update the content
-        textDisplay.renderText(FileOperater::getInstance().returnContent(), 0, 20, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+        
+        textDisplay.renderText(FileOperater::getInstance().returnContent(), scrollX, scrollY);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

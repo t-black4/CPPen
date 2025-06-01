@@ -141,13 +141,16 @@ void TextDisplay::initFreeType() {
     glDeleteShader(fragmentShader);
 }
 
-void TextDisplay::renderText(const std::string& text, float x, float y, float scale, glm::vec3 color) {
+void TextDisplay::renderText(const std::string& text, float x, float y) {
     glUseProgram(textShaderProgram);
     // Use actual window dimensions and flip Y coordinates for top-left origin
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
     glUniformMatrix4fv(glGetUniformLocation(textShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3f(glGetUniformLocation(textShaderProgram, "textColor"), color.x, color.y, color.z);
+    glUniform3f(glGetUniformLocation(textShaderProgram, "textColor"), 1.0f, 1.0f, 1.0f);
     // Convert y coordinate from top-left to bottom-left origin
+    if (y > windowHeight) {
+        y = windowHeight;
+    }
     y = windowHeight - y;
 
     glActiveTexture(GL_TEXTURE0);
@@ -161,11 +164,11 @@ void TextDisplay::renderText(const std::string& text, float x, float y, float sc
         }
         Character ch = Characters[c];
 
-        float xpos = x + ch.Bearing.x * scale;
-        float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        float xpos = x + ch.Bearing.x * 1;
+        float ypos = y - (ch.Size.y - ch.Bearing.y) * 1;
 
-        float w = ch.Size.x * scale;
-        float h = ch.Size.y * scale;
+        float w = ch.Size.x * 1;
+        float h = ch.Size.y * 1;
 
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },
@@ -183,7 +186,7 @@ void TextDisplay::renderText(const std::string& text, float x, float y, float sc
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        x += (ch.Advance >> 6) * scale;
+        x += (ch.Advance >> 6) * 1;
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);

@@ -22,7 +22,7 @@ class TextDisplay {
 public:
     TextDisplay();
     ~TextDisplay();
-    void renderText(const std::string& text, float x, float y, float scale, glm::vec3 color);
+    void renderText(const std::string& text, float x, float y);
     void cleanup();
     void setTextWidth(int width) { textWidth = width; }
     void setTextHeight(int height) { textHeight = height; }
