@@ -188,6 +188,32 @@ void TextDisplay::renderText(const std::string& text, float x, float y) {
 
         x += (ch.Advance >> 6) * 1;
     }
+
+    Character ch = Characters['_'];
+
+    float xpos = x + ch.Bearing.x * 1;
+    float ypos = y - (ch.Size.y - ch.Bearing.y) * 1;
+
+    float w = ch.Size.x * 1;
+    float h = ch.Size.y * 1;
+
+    float vertices[6][4] = {
+        { xpos,     ypos + h,   0.0f, 0.0f },
+        { xpos,     ypos,       0.0f, 1.0f },
+        { xpos + w, ypos,       1.0f, 1.0f },
+
+        { xpos,     ypos + h,   0.0f, 0.0f },
+        { xpos + w, ypos,       1.0f, 1.0f },
+        { xpos + w, ypos + h,   1.0f, 0.0f }
+    };
+
+    glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    x += (ch.Advance >> 6) * 1;
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
