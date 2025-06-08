@@ -22,6 +22,7 @@ private:
     FileOperater(const FileOperater&) = delete;  // Delete copy constructor
     FileOperater& operator=(const FileOperater&) = delete;  // Delete assignment operator
     FileOperater(const std::string& filename);
+    bool saveflag;
 
     static FileOperater* s_instance;
 
@@ -34,4 +35,6 @@ public:
     std::string filename;
     void readFile();
     void saveFile();
+    void setSaveFlag(bool flag) { saveflag = flag; }
+    bool getSaveFlag() const { return saveflag; }
 };

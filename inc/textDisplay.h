@@ -32,6 +32,8 @@ public:
     int getTextHeight() const { return textHeight; }
     int getWindowWidth() const { return windowWidth; }
     int getWindowHeight() const { return windowHeight; }
+    bool isTextChanged() const { return textChanged; }
+    void setTextChanged(bool changed) { textChanged = changed; }
 private:
     int windowWidth = 1200;
     int windowHeight = 800;
@@ -41,4 +43,5 @@ private:
     unsigned int VAO = 0, VBO = 0;
     unsigned int textShaderProgram = 0;
     void initFreeType();
+    bool textChanged = false;
 };

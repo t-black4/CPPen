@@ -147,15 +147,11 @@ void TextDisplay::renderText(const std::string& text, float x, float y) {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(windowWidth), 0.0f, static_cast<float>(windowHeight));
     glUniformMatrix4fv(glGetUniformLocation(textShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3f(glGetUniformLocation(textShaderProgram, "textColor"), 1.0f, 1.0f, 1.0f);
-    // Store the initial X position for resetting on newlines
-    float startX = x;
-
-    // Convert y coordinate from top-left (where y_param is scrollY) to OpenGL's bottom-left origin.
-    // current_y will represent the baseline of the *first* line of text.
-    float current_y = windowHeight - y - textHeight; // Subtract textHeight to set baseline for the first line
-
-    // Clamp current_y if it goes too far down (optional, based on desired behavior)
-    // if (current_y < 0) current_y = 0; 
+    // Convert y coordinate from top-left to bottom-left origin
+    if (y > windowHeight) {
+        y = windowHeight;
+    }
+    y = windowHeight - y;
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
@@ -166,7 +162,6 @@ void TextDisplay::renderText(const std::string& text, float x, float y) {
             y -= textHeight / 1.9; // Moving down means increasing Y in OpenGL coordinates
             continue;
         }
-
         Character ch = Characters[c];
 
         float xpos = x + ch.Bearing.x * 1;

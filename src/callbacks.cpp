@@ -16,8 +16,7 @@ void Callbacks::glfw_key_callback(GLFWwindow* window, int key, int scancode, int
 
     if (key == GLFW_KEY_S && (mods & GLFW_MOD_CONTROL)) {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        FileOperater::getInstance().saveFile();
-
+        FileOperater::getInstance().setSaveFlag(true);
     }else {
         TextInput::getInstance().key_callback(key, scancode, action, mods);
     }

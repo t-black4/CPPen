@@ -75,20 +75,31 @@ int main(int argc, char* argv[]) {
     textDisplay.setTextHeight(32);
     textDisplay.setWindowWidth(windowWidth);
     textDisplay.setWindowHeight(windowHeight);  
+    std::string displayString = "";
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        TextInput::getInstance().getInputChar();
         
         if(TextInput::getInstance().isNewChar()){
             textSession1.inputText(TextInput::getInstance().getInputChar());
             TextInput::getInstance().setNewChar(false);
+            textDisplay.setTextChanged(true);
         }
 
-        std::string displayString = textSession1.getDisplayString();
-        
+        if(FileOperater::getInstance().getSaveFlag()){
+            FileOperater::getInstance().saveFile();
+            FileOperater::getInstance().setContent(textSession1.getDisplayString());
+            FileOperater::getInstance().setSaveFlag(false);
+        }
+
+        if (textDisplay.isTextChanged()) {
+            displayString = textSession1.getDisplayString();
+            textDisplay.setTextChanged(false);
+        }
+            
+            
         textDisplay.renderText(displayString, scrollX, scrollY);
         glfwGetWindowSize(window, &windowWidth, &windowHeight);
         textDisplay.setWindowWidth(windowWidth);
