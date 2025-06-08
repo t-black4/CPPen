@@ -44,6 +44,7 @@ add_executable(cppen
     src/textInput.cpp
     src/fileOperater.cpp
     src/callbacks.cpp
+    src/TextSession.cpp
 )
 
 target_link_libraries(cppen

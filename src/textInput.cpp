@@ -10,30 +10,29 @@ TextInput& TextInput::getInstance() {
     return *s_instance;
 }
 
-TextInput::TextInput() : inputText(new std::vector<char>()) {}
+TextInput::TextInput() : m_currentChar('\0') {}
 
 TextInput::~TextInput() {
-    if (s_instance) {
-        delete s_instance;
-        s_instance = nullptr;
-    }
+    // m_currentChar does not require manual deallocation
 }
 
 void TextInput::character_callback(unsigned int codepoint) {
     // Regular character input (printable ASCII range)
+    
     if (codepoint >= 32 && codepoint <= 126) {
-        inputText->push_back(static_cast<char>(codepoint));
+        m_currentChar = static_cast<char>(codepoint);
+        newchar = true;
     }
 }
 
 void TextInput::key_callback(int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         if (key == GLFW_KEY_BACKSPACE) {
-            if (!inputText->empty()) {
-                inputText->pop_back();
-            }
+            m_currentChar = '\0'; // Set to null character on backspace
+            newchar = true;
         } else if (key == GLFW_KEY_ENTER) {
-            inputText->push_back('\n');
+            m_currentChar = '\n'; // Set to newline on enter
+            newchar = true;
         }
     }
 }

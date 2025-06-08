@@ -6,6 +6,7 @@
 #include "textDisplay.h"
 #include "textInput.h"
 #include "callbacks.h"
+#include "TextSession.h"
 // OpenGL headers
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -27,7 +28,12 @@ int main(int argc, char* argv[]) {
     // Initialize GLFW
     FileOperater::getInstance().setFilename("output.txt");
     FileOperater::getInstance().readFile();
-    TextInput::getInstance().setInputText(FileOperater::getInstance().returnContent());
+    TextSession textSession1;
+
+    for (char ch : FileOperater::getInstance().returnContent()) {
+        textSession1.inputText(ch);
+    }
+    // TextInput::getInstance().setInputText(FileOperater::getInstance().returnContent()); // Commented out as TextInput now handles single char
     
     if (!glfwInit()) {
         cerr << "Failed to initialize GLFW\n";
@@ -74,10 +80,16 @@ int main(int argc, char* argv[]) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Render the input text
-        FileOperater::getInstance().setContent(TextInput::getInstance().getInputText()); // Update the content
+        TextInput::getInstance().getInputChar();
         
-        textDisplay.renderText(FileOperater::getInstance().returnContent(), scrollX, scrollY);
+        if(TextInput::getInstance().isNewChar()){
+            textSession1.inputText(TextInput::getInstance().getInputChar());
+            TextInput::getInstance().setNewChar(false);
+        }
+
+        std::string displayString = textSession1.getDisplayString();
+        
+        textDisplay.renderText(displayString, scrollX, scrollY);
         glfwGetWindowSize(window, &windowWidth, &windowHeight);
         textDisplay.setWindowWidth(windowWidth);
         textDisplay.setWindowHeight(windowHeight);
